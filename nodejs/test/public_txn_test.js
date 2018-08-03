@@ -42,11 +42,13 @@ async function sendPublicTransaction(nodeIndex, amount) {
         fromAcctBalAfterTransfer = await eth.getBalance(fromAcct)
         toAcctBalAfterTransfer = await eth.getBalance(toAcct)
         newBlockNumber = await eth.getBlockNumber()
+
         logger.debug("fromAcct:" + fromAcct + " fromAcctBal:" + fromAcctBalAfterTransfer + " toAcct:" + toAcct + " toAcctBal:" + toAcctBalAfterTransfer + " blockNumber:" + newBlockNumber)
         assert.notEqual(blockNumber, newBlockNumber, "block number not changed")
         assert.notEqual(txHash.blockHash, "", "txHash block hash is empty")
         assert.notEqual(fromAcctBal, fromAcctBalAfterTransfer, "from account balance not changed")
         assert.notEqual(toAcctBal, toAcctBalAfterTransfer, "to account balance not changed")
+
         logger.debug("send transaction from account in node"+nodeIndex+" to account in node" + n + " done")
     }
     logger.info("finished testing in NODE"+nodeIndex)
@@ -82,7 +84,6 @@ describe("test PublicSendTransaction in parallel", function () {
         var res = await sendPublicTransactionInParallel()
         assert.equal(res.length, 7, "test failed in some nodes")
         logger.debug("final resolve ==>"+res)
-
     })
 })
 

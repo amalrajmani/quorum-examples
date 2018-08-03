@@ -3,25 +3,9 @@ const Web3 = require('web3')
 const cfg = require("./config")
 const logger = require('tracer').console({level:'warn'})
 
-const nodeNames = [
-    'http://localhost:22000',
-    'http://localhost:22001',
-    'http://localhost:22002',
-    'http://localhost:22003',
-    'http://localhost:22004',
-    'http://localhost:22005',
-    'http://localhost:22006'
-];
-
-const nodeIndex = 0
-//connect to node 1
 
 
-///////////////
-// MAIN CODE //
-///////////////
-
-// Checks all nodes for receipts given a set of transaction hashes
+// Checks a node for receipts given a set of transaction hashes
 async function checkTxnReceiptInNode(nodeName, transactionHashes) {
     //connect to the node we're checking
     const web3 = new Web3(new Web3.providers.HttpProvider(nodeName))
@@ -78,7 +62,6 @@ async function testContract(privateFlag, nodeId) {
     logger.info('Creating a contract on node', cfg.nodes()[nodeId])
 
     let options = {from: sender, gas: '4700000'};
-    // let options = {from: await web3.eth.accounts[0], gas: '4700000'};
     if (isPrivate) {
         options.privateFor = ["ROAZBWtSacxXQrOe3FGAqJDyJjFePR5ce4TSIzmJ0Bc="];
     }
@@ -133,7 +116,7 @@ async function testContract(privateFlag, nodeId) {
                 assert.equal(results.found, txCnt, "public contract txn - less no of transactions found in node " + node)
             }
          }
-         
+
     })
 
     return true

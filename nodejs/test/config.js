@@ -31,5 +31,7 @@ module.exports = {
                 break;
             }
         }
-    }
+    },
+
+    basePath: function() { return "../examples/7nodes/keys/" }
 }
