@@ -165,13 +165,6 @@ describe("private contract with emitEvent", function () {
         })
     })
 
-    describe("from node7", function (){
-        it('should have same number of events/logs visible in nodes participating in private txn', async function () {
-            await testContract(true, 7)
-        })
-    })
-
-
 })
 
 
