@@ -20,4 +20,10 @@ describe("config", function () {
         })
     })
 
+    describe("constellation", function (){
+        it('should have keys defined', function () {
+            assert.equal(8, cfg.constellations().length)
+        })
+    })
+
 })

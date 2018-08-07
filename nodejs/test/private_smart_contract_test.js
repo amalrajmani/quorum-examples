@@ -1,7 +1,7 @@
 const assert = require('assert')
 const Web3 = require('web3')
 const cfg = require("./config")
-const logger = require('tracer').console({level:'warn'})
+const logger = require('tracer').console({level:cfg.logLevel()})
 
 
 
@@ -32,11 +32,11 @@ async function checkTxnReceiptInNode(nodeName, transactionHashes) {
     return outputObject;
 }
 
-async function testContract(privateFlag, nodeId) {
-    let web3 = new Web3(new Web3.providers.HttpProvider(cfg.nodes()[nodeId]))
+async function testContract(privateFlag, fromNodeId, toNodeId) {
+    let web3 = new Web3(new Web3.providers.HttpProvider(cfg.nodes()[fromNodeId]))
 
 //sender address
-    const sender = cfg.accounts()[nodeId];
+    const sender = cfg.accounts()[fromNodeId];
 
 //which event to fire
     const eventMethodSignature = 'emitEvent()';
@@ -57,13 +57,13 @@ async function testContract(privateFlag, nodeId) {
         "type": "event"
     }])
     let isPrivate = privateFlag;
-    isPrivate ? logger.info("Sending private transactions") : logger.info("Sending public transactions")
+    isPrivate ? logger.info("Sending private transactions from node " + fromNodeId + " to node " + toNodeId) : logger.info("Sending public transactions from node " + fromNodeId + " to node " + toNodeId)
 
-    logger.info('Creating a contract on node', cfg.nodes()[nodeId])
+    logger.info('Creating a contract on node', cfg.nodes()[fromNodeId])
 
     let options = {from: sender, gas: '4700000'};
     if (isPrivate) {
-        options.privateFor = ["ROAZBWtSacxXQrOe3FGAqJDyJjFePR5ce4TSIzmJ0Bc="];
+        options.privateFor = [cfg.constellations()[toNodeId]];
     }
 
     await TestContract.deploy({
@@ -79,7 +79,7 @@ async function testContract(privateFlag, nodeId) {
 
         let optionsEvent = {from: sender};
         if (isPrivate) {
-            optionsEvent.privateFor = ["ROAZBWtSacxXQrOe3FGAqJDyJjFePR5ce4TSIzmJ0Bc="];
+            optionsEvent.privateFor = [cfg.constellations()[toNodeId]];
         }
 
         const txCnt = 10
@@ -98,8 +98,6 @@ async function testContract(privateFlag, nodeId) {
         await Promise.all(promises)
         logger.debug("end all promise")
 
-        //wait for processing
-        //cfg.sleep(300)
 
         for(var k=1; k <=7; ++k) {
             var node = cfg.nodes()[k]
@@ -107,7 +105,7 @@ async function testContract(privateFlag, nodeId) {
             logger.info('In node', node, ',', results.found, 'transactions were found and', results.missing, 'were not')
             logger.info('This node can see the following logs:', JSON.stringify(results.logs))
             if(isPrivate){
-                if(k == nodeId || k == 7){
+                if(k == fromNodeId || k == toNodeId){
                     assert.equal(results.found, txCnt, "private contract txn - less no of transactions found in node " + node)
                 }else {
                     assert.equal(results.found, 0, "private contract txn - should not be visible to node " + node)
@@ -129,84 +127,47 @@ async function testContract(privateFlag, nodeId) {
 
 describe("private contract with emitEvent", function () {
 
-    describe("from node1", function (){
+    describe("sending from node1", function (){
         it('should have same number of events/logs visible in nodes participating in private txn', async function () {
-            await testContract(true, 1)
+            var res = await testContract(true, 1, 2)
+            assert.equal(res, true)
         })
     })
 
-    describe("from node2", function (){
+    describe("sending from node2", function (){
         it('should have same number of events/logs visible in nodes participating in private txn', async function () {
-            await testContract(true, 2)
+            var res = await testContract(true, 2, 3)
+            assert.equal(res, true)
         })
     })
 
-    describe("from node3", function (){
+    describe("sending from node3", function (){
         it('should have same number of events/logs visible in nodes participating in private txn', async function () {
-            await testContract(true, 3)
+            var res = await testContract(true, 3, 4)
+            assert.equal(res, true)
         })
     })
 
-    describe("from node4", function (){
+    describe("sending from node4", function (){
         it('should have same number of events/logs visible in nodes participating in private txn', async function () {
-            await testContract(true, 4)
+            var res = await testContract(true, 4, 5)
+            assert.equal(res, true)
         })
     })
 
-    describe("from node5", function (){
+    describe("sending from node5", function (){
         it('should have same number of events/logs visible in nodes participating in private txn', async function () {
-            await testContract(true, 5)
+            var res = await testContract(true, 5, 6)
+            assert.equal(res, true)
         })
     })
 
-    describe("from node6", function (){
+    describe("sending from node6", function (){
         it('should have same number of events/logs visible in nodes participating in private txn', async function () {
-            await testContract(true, 6)
+            var res = await testContract(true, 6, 7)
+            assert.equal(res, true)
         })
     })
 
 })
 
-
-
-
-describe("public contract with emitEvent", function () {
-
-    describe("from node1", function (){
-        it('should have same number of events/logs visible in all nodes', async function () {
-            await testContract(true, 1)
-        })
-    })
-
-    describe("from node2", function (){
-        it('should have same number of events/logs visible in all nodes', async function () {
-            await testContract(true, 2)
-        })
-    })
-
-    describe("from node3", function (){
-        it('should have same number of events/logs visible in all nodes', async function () {
-            await testContract(true, 3)
-        })
-    })
-
-    describe("from node4", function (){
-        it('should have same number of events/logs visible in all nodes', async function () {
-            await testContract(true, 4)
-        })
-    })
-
-    describe("from node5", function (){
-        it('should have same number of events/logs visible in all nodes', async function () {
-            await testContract(true, 5)
-        })
-    })
-
-    describe("from node6", function (){
-        it('should have same number of events/logs visible in all nodes', async function () {
-            await testContract(true, 6)
-        })
-    })
-
-
-})

@@ -24,6 +24,7 @@ module.exports = {
             "0xa9e871f88cbeb870d32d88e4221dcfbd36dd635a"];
     },
 
+    //constellation node ids that can be used for private txn/smart contract
     constellations: function () {
         return ["ignore",
             "BULeR8JyUWhiuuCMU/HLA0Q5pzkYT+cHII3ZKBey3Bo=","QfeDAys9MPDs2XHExtc84jKGHxZg/aj52DTh0vtA3Xc=",
@@ -32,14 +33,14 @@ module.exports = {
             "ROAZBWtSacxXQrOe3FGAqJDyJjFePR5ce4TSIzmJ0Bc="];
     },
 
-    sleep: function(milliseconds) {
-        var start = new Date().getTime();
-        for (var i = 0; i < 1e7; i++) {
-            if ((new Date().getTime() - start) > milliseconds){
-                break;
-            }
-        }
-    },
+    basePath: function() { return "../examples/7nodes/keys/" },
 
-    basePath: function() { return "../examples/7nodes/keys/" }
+    //info, debug, warn, error
+    logLevel: function () { return 'debug' },
+
+    //processing time to create new blocks
+    processingTime: function () {
+        return 100
+    }
+
 }

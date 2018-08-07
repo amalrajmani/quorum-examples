@@ -1,15 +1,10 @@
 const assert = require('assert')
 const Web3 = require('web3')
 const cfg = require("./config")
-const logger = require('tracer').console({level:'info'})
+const util = require("./util")
+const logger = require('tracer').console({level:cfg.logLevel()})
 
-function getRandomInt(max) {
-    var x =  Math.floor(Math.random() * Math.floor(max))
-    while(x == 0){
-        x =  Math.floor(Math.random() * Math.floor(max))
-    }
-    return x
-}
+
 
 
 async function sendPublicTransaction(nodeIndex, amount) {
@@ -36,12 +31,14 @@ async function sendPublicTransaction(nodeIndex, amount) {
         toAcctBal = await eth.getBalance(toAcct)
         blockNumber = await eth.getBlockNumber()
         logger.debug("fromAcct:" + fromAcct + " fromAcctBal:" + fromAcctBal + " toAcct:" + toAcct + " toAcctBal:" + toAcctBal + " blockNumber:" + blockNumber)
-        var txHash = await eth.sendTransaction({from:fromAcct,to:toAcct,value:getRandomInt(amount)})
+        var txHash = await eth.sendTransaction({from:fromAcct,to:toAcct,value:util.getRandomInt(amount)})
         logger.debug("txHash:" + txHash.blockHash)
-        cfg.sleep(300)
+        util.sleep(cfg.processingTime())
+        var txReciept = await eth.getTransactionReceipt(txHash.transactionHash)
+        logger.debug("txReciept:"+txReciept)
         fromAcctBalAfterTransfer = await eth.getBalance(fromAcct)
         toAcctBalAfterTransfer = await eth.getBalance(toAcct)
-        newBlockNumber = await eth.getBlockNumber()
+        newBlockNumber = txReciept.blockNumber
 
         logger.debug("fromAcct:" + fromAcct + " fromAcctBal:" + fromAcctBalAfterTransfer + " toAcct:" + toAcct + " toAcctBal:" + toAcctBalAfterTransfer + " blockNumber:" + newBlockNumber)
         assert.notEqual(blockNumber, newBlockNumber, "block number not changed")
@@ -62,7 +59,7 @@ async function sendPublicTransactionInParallel(){
         promises[promises.length] = new Promise( async function (res,rej) {
             try{
                 logger.debug("started for node " + j)
-                var r = await sendPublicTransaction(j, getRandomInt(50000))
+                var r = await sendPublicTransaction(j, util.getRandomInt(780))
                 logger.debug("finished for node " + j)
                 res(r)
             }catch (e) {
@@ -78,8 +75,8 @@ async function sendPublicTransactionInParallel(){
 }
 
 
-describe("test PublicSendTransaction in parallel", function () {
-    it('run in parallel across node1 to node7', async () => {
+describe("PublicSendTransaction in parallel", function () {
+    it('should run in parallel across node1 to node7', async () => {
         logger.debug("start resolve ==>")
         var res = await sendPublicTransactionInParallel()
         assert.equal(res.length, 7, "test failed in some nodes")
@@ -87,64 +84,63 @@ describe("test PublicSendTransaction in parallel", function () {
     })
 })
 
-describe("test PublicSendTransaction in sequence", function () {
+describe("PublicSendTransaction in sequence", function () {
 
     describe('sendTransaction', function () {
-        it('from node1', async  () => {
+        it('should work from node1', async  () => {
 
-            var res = await sendPublicTransaction(1, 50000)
+            var res = await sendPublicTransaction(1, 500)
             assert.equal(res, true)
 
         })
     })
 
     describe('sendTransaction', function () {
-        it('from node2', async  () =>  {
+        it('should work from node2', async  () =>  {
 
-            var res = await sendPublicTransaction(2, 60000)
+            var res = await sendPublicTransaction(2, 600)
             assert.equal(res, true)
         })
     })
 
     describe('sendTransaction', function () {
-        it('from node3', async  () =>  {
+        it('should work from node3', async  () =>  {
 
-            var res = await sendPublicTransaction(3, 70000)
+            var res = await sendPublicTransaction(3, 700)
         assert.equal(res, true)
         })
     })
 
     describe('sendTransaction', function () {
-        it('from node4', async  () =>  {
+        it('should work from node4', async  () =>  {
 
-            var res = await sendPublicTransaction(4, 80000)
+            var res = await sendPublicTransaction(4, 800)
         assert.equal(res, true)
         })
     })
 
     describe('sendTransaction', function () {
-        it('from node5', async  () =>  {
+        it('should work from node5', async  () =>  {
 
-            var res = await sendPublicTransaction(5, 90000)
+            var res = await sendPublicTransaction(5, 900)
         assert.equal(res, true)
         })
     })
 
     describe('sendTransaction', function () {
-        it('from node6', async  () =>  {
+        it('should work from node6', async  () =>  {
 
-            var res = await sendPublicTransaction(6, 200000)
+            var res = await sendPublicTransaction(6, 210)
         assert.equal(res, true)
         })
     })
 
     describe('sendTransaction', function () {
-        it('from node7', async  () =>  {
+        it('should work from node7', async  () =>  {
 
-            var res = await sendPublicTransaction(7, 10000)
+            var res = await sendPublicTransaction(7, 220)
         assert.equal(res, true)
         })
     })
-
 })
 

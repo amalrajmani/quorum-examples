@@ -4,7 +4,8 @@ const fs = require('fs')
 const assert = require('assert')
 const Web3 = require('web3')
 const cfg = require("./config")
-const logger = require('tracer').console({level:'info'})
+const util = require("./util")
+const logger = require('tracer').console({level:cfg.logLevel()})
 
 
 async function testSignedTransactionFromNode(nid) {
@@ -39,7 +40,7 @@ async function sendSignedTransaction(fromNodeId, toNodeId) {
 
     var nonce = await web3.eth.getTransactionCount(fromAcct)
 
-
+    var blockNumber = 0
     logger.info('nonce: ', nonce)
 
     let txParams = {
@@ -59,13 +60,15 @@ async function sendSignedTransaction(fromNodeId, toNodeId) {
     const serializedTx = tx.serialize()
     var rawTx = '0x' + tx.serialize().toString('hex')
     logger.info('raw transaction: ', rawTx)
+    blockNumber = await web3.eth.getBlockNumber()
     var sentTx = await web3.eth.sendSignedTransaction(rawTx)
     logger.info("txnObj:" + sentTx.transactionHash)
-    cfg.sleep(100)
+    util.sleep(cfg.processingTime())
     var txnObj = await web3.eth.getTransaction(sentTx.transactionHash)
     logger.info("txn is successful, transactionHash:"+ txnObj.blockHash)
     assert.notEqual(txnObj.blockHash, "", "invalid block hash")
     assert.notEqual(txnObj.blockNumber, 0, "block number is not valid")
+    assert.notEqual(txnObj.blockNumber, blockNumber, "block number has not changed")
     assert.equal(txnObj.from, fromAcct, "from account is not matching")
     return true
 }
@@ -76,43 +79,50 @@ describe("signed transaction", function () {
 
     describe("send signed transaction from node1 to other nodes", function (){
         it('should send signed transaction to other nodes', async function () {
-            await testSignedTransactionFromNode(1)
+            var res = await testSignedTransactionFromNode(1)
+            assert.equal(res, true)
         })
     })
 
     describe("send signed transaction from node2 to other nodes", function (){
         it('should send signed transaction to other nodes', async function () {
-            await testSignedTransactionFromNode(2)
+            var res = await testSignedTransactionFromNode(2)
+            assert.equal(res, true)
         })
     })
 
     describe("send signed transaction from node3 to other nodes", function (){
         it('should send signed transaction to other nodes', async function () {
-            await testSignedTransactionFromNode(3)
+            var res = await testSignedTransactionFromNode(3)
+            assert.equal(res, true)
         })
     })
 
     describe("send signed transaction from node4 to other nodes", function (){
         it('should send signed transaction to other nodes', async function () {
-            await testSignedTransactionFromNode(4)
+            var res = await testSignedTransactionFromNode(4)
+            assert.equal(res, true)
         })
     })
 
     describe("send signed transaction from node5 to other nodes", function (){
         it('should send signed transaction to other nodes', async function () {
-            await testSignedTransactionFromNode(5)
+            var res = await testSignedTransactionFromNode(5)
+            assert.equal(res, true)
         })
     })
 
     describe("send signed transaction from node6 to other nodes", function (){
         it('should send signed transaction to other nodes', async function () {
-            await testSignedTransactionFromNode(6)
+            var res = await testSignedTransactionFromNode(6)
+            assert.equal(res, true)
         })
     })
 
     describe("send signed transaction from node7 to other nodes", function (){
         it('should send signed transaction to other nodes', async function () {
-            await testSignedTransactionFromNode(7)
+            var res = await testSignedTransactionFromNode(7)
+            assert.equal(res, true)
         })
     })
 
