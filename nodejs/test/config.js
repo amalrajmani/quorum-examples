@@ -33,10 +33,12 @@ module.exports = {
             "ROAZBWtSacxXQrOe3FGAqJDyJjFePR5ce4TSIzmJ0Bc="];
     },
 
-    basePath: function() { return "../examples/7nodes/keys/" },
+    basePath: function() { return "/home/vagrant/quorum-examples/examples/7nodes/keys/" },
+
+    qdataPath: function() { return "/home/vagrant/quorum-examples/examples/7nodes/qdata/" },
 
     //info, debug, warn, error
-    logLevel: function () { return 'debug' },
+    logLevel: function () { return 'warn' },
 
     //processing time to create new blocks
     processingTime: function () {
