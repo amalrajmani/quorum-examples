@@ -8,13 +8,14 @@ apt-get install -y build-essential unzip libdb-dev libleveldb-dev libsodium-dev 
 
 curl -sL http://deb.nodesource.com/setup_10.x | sudo -E bash -
 sudo apt-get install -y nodejs 
-sudo npm install -g tracer
-sudo npm install -g mocha
-sudo npm install -g chai
-sudo npm install -g web3
-sudo npm install -g ethereumjs-tx
-sudo npm install -g keythereum
-sudo npm install -g tracer
+npm install tracer
+npm install mocha
+npm install chai
+npm install web3
+npm install ethereumjs-tx
+npm install keythereum
+npm install child-process-promise
+export NODE_PATH=/home/vagrant/node_modules
 
 # install constellation
 CVER="0.3.2"
