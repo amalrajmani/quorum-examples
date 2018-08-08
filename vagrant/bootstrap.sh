@@ -6,6 +6,16 @@ add-apt-repository ppa:ethereum/ethereum
 apt-get update
 apt-get install -y build-essential unzip libdb-dev libleveldb-dev libsodium-dev zlib1g-dev libtinfo-dev solc sysvbanner wrk
 
+curl -sL http://deb.nodesource.com/setup_10.x | sudo -E bash -
+sudo apt-get install -y nodejs 
+sudo npm install -g tracer
+sudo npm install -g mocha
+sudo npm install -g chai
+sudo npm install -g web3
+sudo npm install -g ethereumjs-tx
+sudo npm install -g keythereum
+sudo npm install -g tracer
+
 # install constellation
 CVER="0.3.2"
 CREL="constellation-$CVER-ubuntu1604"
