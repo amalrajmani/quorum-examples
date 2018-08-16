@@ -174,31 +174,31 @@ running acceptance test cases...
   1) signed transaction
        send signed transaction from node1 to other nodes
          should send signed transaction to other nodes:
-     Error: Timeout of 35000ms exceeded. For async tests and hooks, ensure "done()" is called; if returning a Promise, ensure it resolves. (/vagrant/nodejs/acceptance-test/signed_txn_test.js)
+     Error: Timeout of 35000ms exceeded. For async tests and hooks, ensure "done()" is called; if returning a Promise, ensure it resolves. (/vagrant/nodejs/acceptance-test/public_signed_txn_test.js)
 
 
   2) signed transaction
        send signed transaction from node2 to other nodes
          should send signed transaction to other nodes:
-     Error: Timeout of 35000ms exceeded. For async tests and hooks, ensure "done()" is called; if returning a Promise, ensure it resolves. (/vagrant/nodejs/acceptance-test/signed_txn_test.js)
+     Error: Timeout of 35000ms exceeded. For async tests and hooks, ensure "done()" is called; if returning a Promise, ensure it resolves. (/vagrant/nodejs/acceptance-test/public_signed_txn_test.js)
 
 
   3) signed transaction
        send signed transaction from node3 to other nodes
          should send signed transaction to other nodes:
-     Error: Timeout of 35000ms exceeded. For async tests and hooks, ensure "done()" is called; if returning a Promise, ensure it resolves. (/vagrant/nodejs/acceptance-test/signed_txn_test.js)
+     Error: Timeout of 35000ms exceeded. For async tests and hooks, ensure "done()" is called; if returning a Promise, ensure it resolves. (/vagrant/nodejs/acceptance-test/public_signed_txn_test.js)
 
 
   4) signed transaction
        send signed transaction from node4 to other nodes
          should send signed transaction to other nodes:
-     Error: Timeout of 35000ms exceeded. For async tests and hooks, ensure "done()" is called; if returning a Promise, ensure it resolves. (/vagrant/nodejs/acceptance-test/signed_txn_test.js)
+     Error: Timeout of 35000ms exceeded. For async tests and hooks, ensure "done()" is called; if returning a Promise, ensure it resolves. (/vagrant/nodejs/acceptance-test/public_signed_txn_test.js)
 
 
   5) signed transaction
        send signed transaction from node5 to other nodes
          should send signed transaction to other nodes:
-     Error: Timeout of 35000ms exceeded. For async tests and hooks, ensure "done()" is called; if returning a Promise, ensure it resolves. (/vagrant/nodejs/acceptance-test/signed_txn_test.js)
+     Error: Timeout of 35000ms exceeded. For async tests and hooks, ensure "done()" is called; if returning a Promise, ensure it resolves. (/vagrant/nodejs/acceptance-test/public_signed_txn_test.js)
 
 
   6) signed transaction

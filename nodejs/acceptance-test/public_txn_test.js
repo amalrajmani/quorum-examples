@@ -33,7 +33,6 @@ async function sendPublicTransaction(nodeIndex, amount) {
         logger.debug("fromAcct:" + fromAcct + " fromAcctBal:" + fromAcctBal + " toAcct:" + toAcct + " toAcctBal:" + toAcctBal + " blockNumber:" + blockNumber)
         var txHash = await eth.sendTransaction({from:fromAcct,to:toAcct,value:util.getRandomInt(amount)})
         logger.debug("txHash:" + txHash.blockHash)
-        util.sleep(cfg.processingTime())
         var txReciept = await eth.getTransactionReceipt(txHash.transactionHash)
         logger.debug("txReciept:"+txReciept)
         fromAcctBalAfterTransfer = await eth.getBalance(fromAcct)

@@ -35,7 +35,6 @@ async function sendPrivateTransaction(nodeIndex) {
         logger.debug("fromAcct:" + fromAcct + " fromAcctBal:" + fromAcctBal + " toAcct:" + toAcct + " toAcctBal:" + toAcctBal + " blockNumber:" + blockNumber)
         var txHash = await eth.sendTransaction({from:fromAcct,to:toAcct,value:amount, privateFor:[constellationId]})
         logger.debug("txHash:" + txHash.blockHash)
-        util.sleep(cfg.processingTime())
         var txReciept = await eth.getTransactionReceipt(txHash.transactionHash)
         logger.debug("txReciept:"+txReciept)
         fromAcctBalAfterTransfer = await eth.getBalance(fromAcct)
@@ -61,24 +60,20 @@ async function sendPrivateTransactionWithEtherValue() {
     const web3 = new Web3(new Web3.providers.HttpProvider(nodeName))
     const eth = web3.eth
     const fromAcct = accts[nodeIndex]
-    var blockNumber = 0
-    var newBlockNumber = 0
-    var toAcct = ""
-    var fromAcctBal = 0
-    var toAcctBal = 0
+
     var fromAcctBalAfterTransfer = 0
     var toAcctBalAfterTransfer = 0
-    var constellationId = ""
+
     const n = 2
     logger.debug("NODE" + nodeIndex + " -> " + n)
-    toAcct = accts[n]
+    var toAcct = accts[n]
     logger.debug("send private transaction from account in node" + nodeIndex + " to account in node" + n + "...")
-    fromAcctBal = await
+    var fromAcctBal = await
     eth.getBalance(fromAcct)
-    toAcctBal = await
+    var toAcctBal = await
     eth.getBalance(toAcct)
-    blockNumber = await eth.getBlockNumber()
-    constellationId = cfg.constellations()[n]
+    var blockNumber = await eth.getBlockNumber()
+    var constellationId = cfg.constellations()[n]
     logger.debug("fromAcct:" + fromAcct + " fromAcctBal:" + fromAcctBal + " toAcct:" + toAcct + " toAcctBal:" + toAcctBal + " blockNumber:" + blockNumber)
     try{
         var txHash = await eth.sendTransaction({from: fromAcct, to: toAcct, value: amount, privateFor: [constellationId]})
@@ -87,7 +82,7 @@ async function sendPrivateTransactionWithEtherValue() {
         logger.info("error -> " + e)
         assert.notEqual(e.toString().indexOf("ether value is not supported for private transactions"), -1, "failed to return expected error message when ether value is > 0")
     }
-    newBlockNumber = await eth.getBlockNumber()
+    var newBlockNumber = await eth.getBlockNumber()
     logger.debug("fromAcct:" + fromAcct + " fromAcctBal:" + fromAcctBalAfterTransfer + " toAcct:" + toAcct + " toAcctBal:" + toAcctBalAfterTransfer + " blockNumber:" + newBlockNumber)
     assert.equal(blockNumber, newBlockNumber, "block number has changed")
     logger.info("finished testing in NODE" + nodeIndex)

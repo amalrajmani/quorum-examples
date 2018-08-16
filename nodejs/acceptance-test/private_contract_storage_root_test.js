@@ -16,13 +16,12 @@ function sleep(ms) {
 async function testStorageRoot(){
 
   const nodeName = cfg.nodes()[parseInt(fromNodeId)]
-  var cmd = '/home/vagrant/quorum-examples/examples/7nodes/runscript.sh /home/vagrant/quorum-examples/examples/7nodes/private-contract.js'
-    var contractAddress = ""
+    var cmd = 'geth attach --exec \'loadScript(\"' + cfg. basePath() + 'private-contract.js\")\' ipc:' + cfg.qdataPath() + '/dd' + fromNodeId + '/geth.ipc'
     await cp.exec(cmd).then(async (result) => {
         var err = result.err
       var stdout = result.stdout
-      logger.debug(result.err)
-      logger.debug(result.stdout)
+      logger.debug('err:' + result.err)
+      logger.debug('stdout:' + result.stdout)
         if (err) {
             logger.info(err);
             logger.info("private contract creation failed")
@@ -30,10 +29,10 @@ async function testStorageRoot(){
         }
         var msg = stdout
         if(msg.indexOf("Contract transaction send:") != -1){
-          var pat = "TransactionHash: "
+          var pat = "TransactionHash:["
             var i0 = msg.indexOf(pat)
             var i1 = i0 + pat.length
-            var i2 = msg.indexOf(" ",i1)
+            var i2 = msg.indexOf("]",i1)
             var transactionHash = msg.substring(i1,i2)
 
 
@@ -48,9 +47,9 @@ async function testStorageRoot(){
           await getStorageRootFromNode(toNodeId, contractAddr)
 
 
-            logger.debug("m n1StrgRoot="+storageRootArr[fromNodeId])
-            logger.debug("m n3StrgRoot="+storageRootArr["3"])
-            logger.debug("m n7StrgRoot="+storageRootArr[toNodeId])
+            logger.debug("n1 storage Root="+storageRootArr[fromNodeId])
+            logger.debug("n3 storage Root="+storageRootArr["3"])
+            logger.debug("n7 storage Root="+storageRootArr[toNodeId])
         }
     }).catch(function (err) {
         console.error('ERROR: ', err);
@@ -61,7 +60,7 @@ async function testStorageRoot(){
 }
 
 async function getStorageRootFromNode(nodeId, contractAddress){
-    var cmd = './storage-root.sh ' + nodeId +" " + contractAddress
+    var cmd = cfg.basePath()+"storage-root.sh ' + nodeId +" " + contractAddress
     storageRootArr[nodeId] = null
     await cp1.exec(cmd).then(function (result) {
         var err = result.err

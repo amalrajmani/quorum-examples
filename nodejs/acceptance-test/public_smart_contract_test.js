@@ -1,7 +1,6 @@
 const assert = require('assert')
 const Web3 = require('web3')
 const cfg = require("./config")
-const util = require("./util")
 const logger = require('tracer').console({level:cfg.logLevel()})
 
 

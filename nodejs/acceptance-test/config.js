@@ -38,7 +38,9 @@ module.exports = {
 
     nodesToTest: function () { return this.nodes().length - 1 },
 
-    basePath: function () { return "/home/vagrant/quorum-examples/examples/7nodes/keys/" },
+    keysPath: function () { return "/home/vagrant/quorum-examples/examples/7nodes/keys/" },
+
+    basePath: function () { return "/home/vagrant/quorum-examples/nodejs/acceptance-test/" },
 
     qdataPath: function () { return "/home/vagrant/quorum-examples/examples/7nodes/qdata/" },
 
@@ -48,6 +50,11 @@ module.exports = {
     //processing time to create new blocks
     processingTime: function () {
       return 100
+    },
+    //for quorum > 2.0.2 use chain id as 10 or chain id that is present in genesis.json / genesis-istanbul.json
+    chainId: function () {
+        return 10
+
     }
 
 }
