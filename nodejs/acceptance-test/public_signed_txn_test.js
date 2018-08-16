@@ -77,7 +77,7 @@ async function sendSignedTransaction(fromNodeId, toNodeId) {
 
 
 
-describe("signed transaction", function () {
+describe("public signed transaction", function () {
 
     describe("send signed transaction from node1 to other nodes", function (){
         it('should send signed transaction to other nodes', async function () {
