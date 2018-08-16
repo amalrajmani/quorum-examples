@@ -50,7 +50,7 @@ async function sendSignedTransaction(fromNodeId, toNodeId) {
         gasLimit: '0x47b760',
         to: toAcct,
         value: '0x01',
-        chainId: 10,
+        chainId: cfg.chainId(),
     }
 
     logger.info('tx payload: ', txParams)
