@@ -18,7 +18,7 @@ async function testSignedTransactionFromNode(nid) {
 async function sendSignedTransaction(fromNodeId, toNodeId) {
     assert.notEqual(fromNodeId, toNodeId, "from node and to node should be different")
     logger.info("send signed transaction from account in node" + fromNodeId + " to node" + toNodeId)
-    const baseKeyPath = cfg.basePath()
+    const baseKeyPath = cfg.keysPath()
     const keyFile = baseKeyPath + "key" + fromNodeId
     const nodeName = cfg.nodes()[fromNodeId]
     const toAcct = cfg.accounts()[toNodeId]
@@ -34,7 +34,7 @@ async function sendSignedTransaction(fromNodeId, toNodeId) {
     logger.info('privateKey of account from node: ', privateKey.toString('hex'))
 
     const fromAcctArr = await web3.eth.getAccounts()
-    const fromAcct = cfg.accounts()[fromNodeId]
+    const fromAcct = fromAcctArr[0]
     logger.info('from account: ', fromAcct)
 
     var nonce = await web3.eth.getTransactionCount(fromAcct)
@@ -66,10 +66,12 @@ async function sendSignedTransaction(fromNodeId, toNodeId) {
     logger.info("txnObj transactionHash:" + sentTx.transactionHash)
     util.sleep(cfg.processingTime())
     var txnObj = await web3.eth.getTransaction(sentTx.transactionHash)
-    logger.info("txn is successful, blockHash:"+ txnObj.blockHash)
-    assert.notEqual(txnObj.blockHash, "", "invalid blockhash for txnHash:" + sentTx.transactionHash)
-    assert.notEqual(txnObj.blockNumber, 0, "block number is not valid txnHash:" + sentTx.transactionHash)
+    logger.info("txn is successful, transactionHash:"+ txnObj.blockHash)
+    assert.notEqual(txnObj.blockHash, "", "invalid block hash for txnHash:" + sentTx.transactionHash)
+    assert.notEqual(txnObj.blockNumber, 0, "block number is not valid for txnHash:" + sentTx.transactionHash)
     assert.notEqual(txnObj.blockNumber, blockNumber, "block number has not changed for txnHash:" + sentTx.transactionHash)
+    assert.equal(txnObj.from, fromAcct, "from account is not matching for txnHash:" + sentTx.transactionHash)
+    logger.info("---------------------------------------------------------")
     return true
 }
 

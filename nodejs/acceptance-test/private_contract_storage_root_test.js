@@ -1,6 +1,7 @@
 const assert = require('assert')
 const cfg = require("./config")
 const util = require("./util")
+const Web3 = require('web3')
 const cp = require("child-process-promise")
 const cp1 = require("child-process-promise")
 const logger = require('tracer').console({level:cfg.logLevel()})
@@ -8,33 +9,43 @@ var storageRootArr = {}
 const fromNodeId="1"
 const toNodeId="7"
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 async function testStorageRoot(){
 
-    var cmd = 'geth attach --exec \'loadScript(\"private-contract.js\")\' ipc:'+cfg.qdataPath()+'/dd'+fromNodeId+'/geth.ipc'
+  const nodeName = cfg.nodes()[parseInt(fromNodeId)]
+  var cmd = '/home/vagrant/quorum-examples/examples/7nodes/runscript.sh /home/vagrant/quorum-examples/examples/7nodes/private-contract.js'
     var contractAddress = ""
-    logger.debug("exec process: " + cmd)
     await cp.exec(cmd).then(async (result) => {
         var err = result.err
-        var stdout = result.stdout
+      var stdout = result.stdout
+      logger.debug(result.err)
+      logger.debug(result.stdout)
         if (err) {
-            logger.log(err);
-            logger.log("private contract creation failed")
+            logger.info(err);
+            logger.info("private contract creation failed")
             return false;
         }
         var msg = stdout
-        if(msg.indexOf("success:") != -1){
-            //logger.log("storage root:" + msg)
-            var pat = "TransactionHash:["
+        if(msg.indexOf("Contract transaction send:") != -1){
+          var pat = "TransactionHash: "
             var i0 = msg.indexOf(pat)
             var i1 = i0 + pat.length
-            var i2 = msg.indexOf("]",i1)
-            contractAddress = msg.substring(i1,i2)
+            var i2 = msg.indexOf(" ",i1)
+            var transactionHash = msg.substring(i1,i2)
 
 
-            logger.debug("transaction hash:" + contractAddress)
-            await getStorageRootFromNode(fromNodeId, contractAddress)
-            await getStorageRootFromNode("3", contractAddress)
-            await getStorageRootFromNode(toNodeId, contractAddress)
+          await sleep (10000)
+          var web3 = new Web3(new Web3.providers.HttpProvider(nodeName))
+          var txnRcpt = await web3.eth.getTransactionReceipt(transactionHash)
+          var contractAddr = txnRcpt.contractAddress
+
+
+          await getStorageRootFromNode(fromNodeId, contractAddr)
+          await getStorageRootFromNode("3",contractAddr )
+          await getStorageRootFromNode(toNodeId, contractAddr)
 
 
             logger.debug("m n1StrgRoot="+storageRootArr[fromNodeId])
@@ -52,7 +63,6 @@ async function testStorageRoot(){
 async function getStorageRootFromNode(nodeId, contractAddress){
     var cmd = './storage-root.sh ' + nodeId +" " + contractAddress
     storageRootArr[nodeId] = null
-    logger.log("1.exec process: " + cmd)
     await cp1.exec(cmd).then(function (result) {
         var err = result.err
         var stdout = result.stdout
