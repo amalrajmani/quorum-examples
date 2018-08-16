@@ -41,18 +41,25 @@ async function sendSignedTransaction(fromNodeId, toNodeId) {
     var nonce = await web3.eth.getTransactionCount(fromAcct)
 
     var blockNumber = 0
-    logger.info('nonce: ', nonce)
+  // logger.info('nonce: ', nonce)
+  // var hexString = nonce.toString(16)
+  // var newnonce = '0x0'+ hexString
+  // logger.info(newnonce)
+
+
 
     let txParams = {
-        nonce: '0x0'+nonce,
-        gasPrice: '0x00',
+        // nonce: '0x0'+nonce,
+      nonce: '0x0'+ nonce.toString(16),
+        gasPrice: '0x0',
         gasLimit: '0x47b760',
         to: toAcct,
-        value: '0x01',
-        chainId: 10,
+        value: '0x05',
+        chainId: 123,
     }
 
     logger.info('tx payload: ', txParams)
+
 
     const tx = new EthereumTx(txParams)
 
@@ -63,6 +70,8 @@ async function sendSignedTransaction(fromNodeId, toNodeId) {
     blockNumber = await web3.eth.getBlockNumber()
     var sentTx = await web3.eth.sendSignedTransaction(rawTx)
     logger.info("txnObj:" + sentTx.transactionHash)
+
+
     util.sleep(cfg.processingTime())
     var txnObj = await web3.eth.getTransaction(sentTx.transactionHash)
     logger.info("txn is successful, transactionHash:"+ txnObj.blockHash)
@@ -70,6 +79,7 @@ async function sendSignedTransaction(fromNodeId, toNodeId) {
     assert.notEqual(txnObj.blockNumber, 0, "block number is not valid")
     assert.notEqual(txnObj.blockNumber, blockNumber, "block number has not changed")
     assert.equal(txnObj.from, fromAcct, "from account is not matching")
+    logger.info("---------------------------------------------------------")
     return true
 }
 
