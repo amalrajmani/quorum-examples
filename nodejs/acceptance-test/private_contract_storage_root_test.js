@@ -60,7 +60,7 @@ async function testStorageRoot(){
 }
 
 async function getStorageRootFromNode(nodeId, contractAddress){
-    var cmd = cfg.basePath()+"storage-root.sh ' + nodeId +" " + contractAddress
+    var cmd = cfg.basePath()+"storage-root.sh " + nodeId +" " + contractAddress
     storageRootArr[nodeId] = null
     await cp1.exec(cmd).then(function (result) {
         var err = result.err
