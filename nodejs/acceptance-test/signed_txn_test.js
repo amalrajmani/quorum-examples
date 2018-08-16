@@ -7,9 +7,8 @@ const cfg = require("./config")
 const util = require("./util")
 const logger = require('tracer').console({level:cfg.logLevel()})
 
-
 async function testSignedTransactionFromNode(nid) {
-    for (t = 1; t <= 7; ++t) {
+    for (t = 1; t <= cfg.nodesToTest(); ++t) {
         if (nid != t)
             await sendSignedTransaction(nid, t)
     }
@@ -35,16 +34,18 @@ async function sendSignedTransaction(fromNodeId, toNodeId) {
     logger.info('privateKey of account from node: ', privateKey.toString('hex'))
 
     const fromAcctArr = await web3.eth.getAccounts()
-    const fromAcct = fromAcctArr[0]
+    const fromAcct = cfg.accounts()[fromNodeId]
     logger.info('from account: ', fromAcct)
 
     var nonce = await web3.eth.getTransactionCount(fromAcct)
 
     var blockNumber = 0
+    var nonceHex = '0x0' + nonce.toString(16).toUpperCase()
     logger.info('nonce: ', nonce)
+    logger.info('nonceHex: ', nonceHex)
 
     let txParams = {
-        nonce: '0x0'+nonce,
+        nonce: nonceHex,
         gasPrice: '0x00',
         gasLimit: '0x47b760',
         to: toAcct,
@@ -62,14 +63,13 @@ async function sendSignedTransaction(fromNodeId, toNodeId) {
     logger.info('raw transaction: ', rawTx)
     blockNumber = await web3.eth.getBlockNumber()
     var sentTx = await web3.eth.sendSignedTransaction(rawTx)
-    logger.info("txnObj:" + sentTx.transactionHash)
+    logger.info("txnObj transactionHash:" + sentTx.transactionHash)
     util.sleep(cfg.processingTime())
     var txnObj = await web3.eth.getTransaction(sentTx.transactionHash)
-    logger.info("txn is successful, transactionHash:"+ txnObj.blockHash)
-    assert.notEqual(txnObj.blockHash, "", "invalid block hash")
-    assert.notEqual(txnObj.blockNumber, 0, "block number is not valid")
-    assert.notEqual(txnObj.blockNumber, blockNumber, "block number has not changed")
-    assert.equal(txnObj.from, fromAcct, "from account is not matching")
+    logger.info("txn is successful, blockHash:"+ txnObj.blockHash)
+    assert.notEqual(txnObj.blockHash, "", "invalid blockhash for txnHash:" + sentTx.transactionHash)
+    assert.notEqual(txnObj.blockNumber, 0, "block number is not valid txnHash:" + sentTx.transactionHash)
+    assert.notEqual(txnObj.blockNumber, blockNumber, "block number has not changed for txnHash:" + sentTx.transactionHash)
     return true
 }
 

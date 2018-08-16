@@ -6,16 +6,15 @@ add-apt-repository ppa:ethereum/ethereum
 apt-get update
 apt-get install -y build-essential unzip libdb-dev libleveldb-dev libsodium-dev zlib1g-dev libtinfo-dev solc sysvbanner wrk
 
-curl -sL http://deb.nodesource.com/setup_10.x | sudo -E bash -
-sudo apt-get install -y nodejs 
-npm install tracer
-npm install mocha
-npm install chai
+cd /home/vagrant
+sudo npm install --global mocha
+sudo npm install --global tracer
+sudo npm install --global chai
+sudo npm install --global child-process-promise
 npm install web3
-npm install ethereumjs-tx
 npm install keythereum
-npm install child-process-promise
-export NODE_PATH=/home/vagrant/node_modules
+npm install ethereumjs-tx
+export NODE_PATH=/home/vagrant/node_modules:/usr/lib/node_modules
 
 # install constellation
 CVER="0.3.2"

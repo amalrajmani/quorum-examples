@@ -33,9 +33,11 @@ module.exports = {
             "ROAZBWtSacxXQrOe3FGAqJDyJjFePR5ce4TSIzmJ0Bc="];
     },
 
-    basePath: function() { return "/home/vagrant/quorum-examples/examples/7nodes/keys/" },
+    nodesToTest: function () { return this.nodes().length - 1 },
 
-    qdataPath: function() { return "/home/vagrant/quorum-examples/examples/7nodes/qdata/" },
+    basePath: function () { return "/home/vagrant/quorum-examples/examples/7nodes/keys/" },
+
+    qdataPath: function () { return "/home/vagrant/quorum-examples/examples/7nodes/qdata/" },
 
     //info, debug, warn, error
     logLevel: function () { return 'warn' },

@@ -97,7 +97,7 @@ async function sendPrivateTransactionWithEtherValue() {
 async function sendPrivateTransactionInParallel(){
     var promises = []
     var resArr = []
-    for(var j = 1; j <=7; ++j){
+    for(var j = 1; j <=cfg.nodesToTest(); ++j){
         promises[promises.length] = new Promise( async function (res,rej) {
             try{
                 logger.debug("started for node " + j)

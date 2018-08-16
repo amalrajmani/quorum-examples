@@ -22,7 +22,7 @@ async function sendPublicTransaction(nodeIndex, amount) {
     var fromAcctBalAfterTransfer = 0
     var toAcctBalAfterTransfer = 0
 
-    for(var n=1; n < accts.length; ++n) {
+    for(var n=1; n <= cfg.nodesToTest(); ++n) {
         if(n == nodeIndex) continue
         logger.debug("NODE"+nodeIndex + " -> " + n)
         toAcct = accts[n]
@@ -55,7 +55,7 @@ async function sendPublicTransaction(nodeIndex, amount) {
 async function sendPublicTransactionInParallel(){
     var promises = []
     var resArr = []
-    for(var j = 1; j <=7; ++j){
+    for(var j = 1; j <=cfg.nodesToTest(); ++j){
         promises[promises.length] = new Promise( async function (res,rej) {
             try{
                 logger.debug("started for node " + j)
@@ -79,7 +79,7 @@ describe("PublicSendTransaction in parallel", function () {
     it('should run in parallel across node1 to node7', async () => {
         logger.debug("start resolve ==>")
         var res = await sendPublicTransactionInParallel()
-        assert.equal(res.length, 7, "test failed in some nodes")
+        assert.equal(res.length, cfg.nodesToTest(), "test failed in some nodes")
         logger.debug("final resolve ==>"+res)
     })
 })

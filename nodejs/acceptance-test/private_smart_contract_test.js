@@ -99,7 +99,7 @@ async function testContract(privateFlag, fromNodeId, toNodeId) {
         logger.debug("end all promise")
 
 
-        for(var k=1; k <=7; ++k) {
+        for(var k=1; k <=cfg.nodesToTest(); ++k) {
             var node = cfg.nodes()[k]
             const results = await checkTxnReceiptInNode(node, hashes)
             logger.info('In node', node, ',', results.found, 'transactions were found and', results.missing, 'were not')
