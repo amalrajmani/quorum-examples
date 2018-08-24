@@ -4,7 +4,6 @@ const cfg = require("./config")
 const logger = require('tracer').console({level:cfg.logLevel()})
 
 
-
 // Checks a node for receipts given a set of transaction hashes
 async function checkTxnReceiptInNode(nodeName, transactionHashes) {
     //connect to the node we're checking
@@ -85,17 +84,15 @@ async function testContract(privateFlag, fromNodeId, toNodeId) {
         const txCnt = 10
         for (let counter = 0; counter < txCnt; counter++) {
 
-            let current = contractInstance.methods[eventMethodSignature]().send(
+            let current = await contractInstance.methods[eventMethodSignature]().send(
                 optionsEvent
             ).on('receipt', function () {
             }).on('transactionHash', function (hash) {
                 hashes.push(hash)
             })
-
-            promises.push(current)
+		logger.info("hashes len " + hashes.length + " top hash->" + hashes[hashes.length-1])
+		
         }
-        logger.debug("start all promise")
-        await Promise.all(promises)
         logger.debug("end all promise")
 
 
