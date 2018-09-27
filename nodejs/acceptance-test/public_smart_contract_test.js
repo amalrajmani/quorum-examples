@@ -5,6 +5,7 @@ const logger = require('tracer').console({level:cfg.logLevel()})
 
 
 
+
 // Checks a node for receipts given a set of transaction hashes
 async function checkTxnReceiptInNode(nodeName, transactionHashes) {
     //connect to the node we're checking
@@ -85,17 +86,15 @@ async function testContract(privateFlag, nodeId) {
         const txCnt = 10
         for (let counter = 0; counter < txCnt; counter++) {
 
-            let current = contractInstance.methods[eventMethodSignature]().send(
+            let current = await contractInstance.methods[eventMethodSignature]().send(
                 optionsEvent
             ).on('receipt', function () {
             }).on('transactionHash', function (hash) {
                 hashes.push(hash)
             })
+            logger.info("hashes len " + hashes.length + " top hash->" + hashes[hashes.length-1])
 
-            promises.push(current)
         }
-        logger.debug("start all promise")
-        await Promise.all(promises)
         logger.debug("end all promise")
 
 
@@ -125,42 +124,42 @@ describe("public contract with emitEvent", function () {
 
     describe("sending from node1", function (){
         it('should have same number of events/logs visible in all nodes', async function () {
-            var res = await testContract(true, 1)
+            var res = await testContract(false, 1)
             assert.equal(res, true)
         })
     })
 
     describe("sending from node2", function (){
         it('should have same number of events/logs visible in all nodes', async function () {
-            var res = await testContract(true, 2)
+            var res = await testContract(false, 2)
             assert.equal(res, true)
         })
     })
 
     describe("sending from node3", function (){
         it('should have same number of events/logs visible in all nodes', async function () {
-            var res = await testContract(true, 3)
+            var res = await testContract(false, 3)
             assert.equal(res, true)
         })
     })
 
     describe("sending from node4", function (){
         it('should have same number of events/logs visible in all nodes', async function () {
-            var res = await testContract(true, 4)
+            var res = await testContract(false, 4)
             assert.equal(res, true)
         })
     })
 
     describe("sending from node5", function (){
         it('should have same number of events/logs visible in all nodes', async function () {
-            var res = await testContract(true, 5)
+            var res = await testContract(false, 5)
             assert.equal(res, true)
         })
     })
 
     describe("sending from node6", function (){
         it('should have same number of events/logs visible in all nodes', async function () {
-            var res = await testContract(true, 6)
+            var res = await testContract(false, 6)
             assert.equal(res, true)
         })
     })
