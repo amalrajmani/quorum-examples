@@ -1,6 +1,9 @@
 var cfg = require("./config")
 var assert = require('assert')
 
+/*
+test to ensure config parameters are defined
+ */
 describe("config", function () {
 
     describe("accounts", function () {

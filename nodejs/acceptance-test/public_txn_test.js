@@ -4,6 +4,10 @@ const cfg = require("./config")
 const util = require("./util")
 const logger = require('tracer').console({level:cfg.logLevel()})
 
+/*
+This test case covers the following scenarios:
+sending  public transaction from one node to the other nodes.
+ */
 
 
 

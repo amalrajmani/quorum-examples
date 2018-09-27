@@ -7,6 +7,14 @@ const cfg = require("./config")
 const util = require("./util")
 const logger = require('tracer').console({level:cfg.logLevel()})
 
+/*
+This test case covers the following scenarios:
+sending signed public transaction from one node to the other nodes
+NOTE:
+you should pass nonce value in HEX format
+chain id should match with netword id of the node (from raft/istanbul config)
+ */
+
 async function testSignedTransactionFromNode(nid) {
     for (t = 1; t <= cfg.nodesToTest(); ++t) {
         if (nid != t)

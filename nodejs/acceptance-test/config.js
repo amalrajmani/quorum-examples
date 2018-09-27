@@ -1,4 +1,11 @@
 module.exports = {
+
+    /*
+        The config parameter required for testing based on 7nodes example
+     */
+
+
+
     //list of nodes defined in 7nodes examples
     nodes: function () {
 
@@ -45,7 +52,7 @@ module.exports = {
     qdataPath: function () { return "/Users/amalraj.manigmail.com/quorum-examples/examples/7nodes/qdata/" },
 
     //info, debug, warn, error
-    logLevel: function () { return 'warn' },
+    logLevel: function () { return 'info' },
 
     //processing time to create new blocks
     processingTime: function () {

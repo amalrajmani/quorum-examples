@@ -3,6 +3,13 @@ const Web3 = require('web3')
 const cfg = require("./config")
 const logger = require('tracer').console({level:cfg.logLevel()})
 
+/*
+This test case covers the following scenarios:
+sending private smart contract transaction from one node to the other nodes and emitting events.
+The emitted events are checked and expected count of events in the participant nodes is asserted
+NOTE:
+We should test with high txn count for ISTANBUL to simulate events getting distributed in multiple blocks
+ */
 
 // Checks a node for receipts given a set of transaction hashes
 async function checkTxnReceiptInNode(nodeName, transactionHashes) {

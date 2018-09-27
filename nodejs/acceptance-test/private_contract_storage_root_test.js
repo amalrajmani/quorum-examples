@@ -9,9 +9,14 @@ var storageRootArr = {}
 const fromNodeId="1"
 const toNodeId="7"
 
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
+/*
+This test case covers the following scenario:
+The storage root should be same in all the nodes that participated in a private transaction and it should be different in other nodes.
+
+TODO: storgaeRoot method should be added to Quorums web3-js and it should be used instead of testing via geth
+*/
+
+
 
 async function testStorageRoot(){
 
@@ -36,7 +41,7 @@ async function testStorageRoot(){
             var transactionHash = msg.substring(i1,i2)
 
 
-          await sleep (10000)
+          await util.sleep (10000)
           var web3 = new Web3(new Web3.providers.HttpProvider(nodeName))
           var txnRcpt = await web3.eth.getTransactionReceipt(transactionHash)
           var contractAddr = txnRcpt.contractAddress
