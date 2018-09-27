@@ -38,11 +38,11 @@ module.exports = {
 
     nodesToTest: function () { return this.nodes().length - 1 },
 
-    keysPath: function () { return "/home/vagrant/quorum-examples/examples/7nodes/keys/" },
+    keysPath: function () { return "/Users/amalraj.manigmail.com/quorum-examples/examples/7nodes/keys/" },
 
-    basePath: function () { return "/home/vagrant/quorum-examples/nodejs/acceptance-test/" },
+    basePath: function () { return "/Users/amalraj.manigmail.com/quorum-examples/nodejs/acceptance-test/" },
 
-    qdataPath: function () { return "/home/vagrant/quorum-examples/examples/7nodes/qdata/" },
+    qdataPath: function () { return "/Users/amalraj.manigmail.com/quorum-examples/examples/7nodes/qdata/" },
 
     //info, debug, warn, error
     logLevel: function () { return 'warn' },

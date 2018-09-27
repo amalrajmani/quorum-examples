@@ -58,3 +58,6 @@ cp permissioned-nodes.json qdata/dd7/static-nodes.json
 cp raft/nodekey7 qdata/dd7/geth/nodekey
 cp keys/key7 qdata/dd7/keystore
 geth --datadir qdata/dd7 init genesis.json
+
+#Initialise Tessera configuration
+./tessera-init.sh
