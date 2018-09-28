@@ -15,7 +15,7 @@ function usage() {
   exit -1
 }
 
-privacyImpl=constellation
+privacyImpl=tessera
 tesseraOptions=
 while (( "$#" )); do
     case "$1" in

@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "uninstalling npm packages required for testing..."
-cd /home/vagrant
+cd ~
 sudo npm uninstall npm -g
 sudo apt-get purge --auto-remove nodejs
 sudo rm -rf ~/node_modules/
